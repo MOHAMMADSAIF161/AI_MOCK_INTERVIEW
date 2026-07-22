@@ -269,6 +269,10 @@
         async function uploadResume() {
             const file = document.getElementById('resume-file').files[0];
             if (!file) return;
+              // Stop recognition while processing
+            isAISpeaking = true;
+            isProcessing = true;
+            if (recognition) recognition.stop();
             speak("Please wait, I am reading your resume.");
             const formData = new FormData();
             formData.append('resume', file);
@@ -278,6 +282,7 @@
                 if (data.success) {
                     setTimeout(() => speak(data.message), 3000);
                 } else {
+                    console.log('Resume error:', data);
                     speak("Sorry, I could not read your resume.");
                 }
             } catch(err) {
